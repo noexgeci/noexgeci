@@ -1,7 +1,10 @@
 # Lash by Laura — Messenger megkeresés
 
-A `[LINK]` helyére az artifact URL megy. **Küldés előtt oszd meg publikusan** –
-az artifact alapból privát, különben nem tudja megnyitni.
+**Küldés előtt oszd meg publikusan** – az artifact alapból privát, különben
+Laura bejelentkezési képernyőt lát.
+
+Amint az oldal kikerül a `mockup.nhm.one`-ra, cseréld a linket arra: jobban
+néz ki, és a Facebook a rendes előnézeti kártyát mutatja hozzá.
 
 ---
 
@@ -27,7 +30,7 @@ az artifact alapból privát, különben nem tudja megnyitni.
 > Megnézed? Semmire nem kötelez, és akkor is a tiéd az ötlet, ha nem
 > dolgozunk együtt. 🙂
 >
-> 👉 [LINK]
+> 👉 https://claude.ai/code/artifact/c3793dc1-abbc-47dd-bf33-0bb8d2b26c2b
 
 **Miért így:** az első bekezdés bizonyítja, hogy tényleg elolvastad, amit írt.
 A második a saját fájdalmát mondja ki, nem az én szolgáltatásomat. A harmadik
