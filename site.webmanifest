@@ -1,0 +1,13 @@
+{
+  "name": "Lash by Laura — szempillaépítés Veszprém",
+  "short_name": "Lash by Laura",
+  "description": "UV technológiás szempillaépítés Veszprémben. Nézd meg a szabad időpontokat és foglalj online.",
+  "lang": "hu",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0B0A",
+  "theme_color": "#0E0B0A",
+  "icons": [
+    { "src": "/assets/og.jpg", "sizes": "1200x630", "type": "image/jpeg" }
+  ]
+}

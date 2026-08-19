@@ -1,32 +1,42 @@
 #!/usr/bin/env python3
-"""Self-contained változat az Artifact publikáláshoz.
+"""Artifact-változat az index.html-ből.
 
-Az assets/ képeket base64 data URI-ba forgatja. Minden kép csak egyszer
-kerül be: a JS-ből hivatkozott példányok egy ASSETS lookupon keresztül
-érik el ugyanazt a stringet.
+Az Artifact futtató saját <head>-et ad a laphoz, ezért a teljes dokumentumból
+csak a törzs kerül át — a <title>, a betűtípus-hivatkozás és a stíluslap a
+törzs elejére költözik. A képek base64 data URI-ba fordulnak, mindegyik
+pontosan egyszer: a JS-ből hivatkozott példányok egy ASSETS lookupot néznek.
 """
 import base64, io, re
 
 src = io.open("index.html", encoding="utf-8").read()
-paths = sorted(set(re.findall(r'assets/[A-Za-z0-9_-]+\.jpg', src)))
 
-def datauri(p):
+def block(pattern, flags=re.S):
+    m = re.search(pattern, src, flags)
+    if not m:
+        raise SystemExit("nem találom: " + pattern)
+    return m.group(0)
+
+title = block(r"<title>.*?</title>")
+fonts = block(r'<link rel="preconnect".*?display=swap">')
+style = block(r"<style>.*?</style>")
+body  = block(r"<body>(.*)</body>").replace("<body>", "").replace("</body>", "")
+
+out = "\n".join([title, fonts, style, body])
+
+paths = sorted(set(re.findall(r"assets/[A-Za-z0-9_-]+\.jpg", out)))
+uris = {}
+for p in paths:
     with open(p, "rb") as fh:
-        return "data:image/jpeg;base64," + base64.b64encode(fh.read()).decode()
+        uris[p] = "data:image/jpeg;base64," + base64.b64encode(fh.read()).decode()
 
-uris = {p: datauri(p) for p in paths}
-
-# 1. HTML attribútumok: közvetlen behelyettesítés
 out = re.sub(r'src="(assets/[A-Za-z0-9_-]+\.jpg)"',
-             lambda m: 'src="' + uris[m.group(1)] + '"', src)
-
-# 2. JS stringliterálok: lookupra cserélve, hogy ne duplikálódjon a base64
+             lambda m: 'src="' + uris[m.group(1)] + '"', out)
 out = re.sub(r'"(assets/[A-Za-z0-9_-]+\.jpg)"',
              lambda m: 'ASSETS["' + m.group(1) + '"]', out)
 
 lookup = "<script>\nvar ASSETS = {\n" + ",\n".join(
-    '  "%s": "%s"' % (p, uris[p]) for p in paths) + "\n};\n</script>\n"
-out = out.replace("<nav class=\"nav\"", lookup + "\n<nav class=\"nav\"", 1)
+    '  "%s": "%s"' % (p, uris[p]) for p in paths) + "\n};\n</script>"
+out = out.replace('<a class="skip"', lookup + '\n\n<a class="skip"', 1)
 
 io.open("artifact.html", "w", encoding="utf-8").write(out)
 print("artifact.html %.2f MB (%d kép)" % (len(out) / 1024 / 1024, len(paths)))
