@@ -165,6 +165,12 @@ section{position:relative}
 .plate::after{
   content:"";position:absolute;inset:12px;border:1px solid var(--line-soft);pointer-events:none;
 }
+.plate img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.plate--photo .plate__mono{display:none}
+.plate--photo::before{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(0deg,rgba(14,11,10,.8) 0%,rgba(14,11,10,.35) 22%,rgba(14,11,10,0) 48%)}
+.plate--photo .plate__cap{color:var(--dim)}
+.plate--photo figcaption{z-index:2}
 .plate__mono{font-family:var(--display);font-size:clamp(46px,7vw,74px);letter-spacing:.06em;color:rgba(243,235,226,.2)}
 .plate__cap{
   position:absolute;bottom:22px;left:0;right:0;text-align:center;
@@ -205,10 +211,11 @@ section{position:relative}
 .bk-main{padding:clamp(24px,3.4vw,44px);display:flex;flex-direction:column;gap:34px}
 .bk-side{
   padding:clamp(24px,3.4vw,44px);border-left:1px solid var(--line);
+  align-self:start;position:sticky;top:74px;
   background:linear-gradient(180deg,var(--ink-3),var(--ink-2));
   display:flex;flex-direction:column;gap:24px;
 }
-@media(max-width:940px){.bk-side{border-left:0;border-top:1px solid var(--line)}}
+@media(max-width:940px){.bk-side{border-left:0;border-top:1px solid var(--line);position:static}}
 
 .steps{display:flex;gap:22px;flex-wrap:wrap;align-items:center}
 .step{display:flex;align-items:center;gap:10px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2);transition:color .4s}
@@ -232,8 +239,8 @@ section{position:relative}
 }
 .svc:hover{border-color:var(--line);background:rgba(243,235,226,.03)}
 .svc[aria-pressed="true"]{border-color:var(--bronze);background:rgba(176,141,99,.11)}
-.svc__t{font-family:var(--display);font-size:19px;line-height:1.2}
-.svc__d{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim-2);margin-top:6px}
+.svc__t{display:block;font-family:var(--display);font-size:19px;line-height:1.2}
+.svc__d{display:block;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim-2);margin-top:6px}
 .svc__p{font-family:var(--display);font-size:18px;color:var(--bronze-lt);font-variant-numeric:tabular-nums}
 
 .cal__head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:6px}
@@ -328,18 +335,28 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
 .gtile{position:relative;overflow:hidden;border:1px solid var(--line-soft);background:
   radial-gradient(90% 70% at 35% 25%,rgba(201,166,158,.13),transparent 62%),
   linear-gradient(155deg,var(--ink-3),var(--ink-2));display:grid;place-items:center}
-.gtile img{width:100%;height:100%;object-fit:cover;display:block}
+.gtile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.gtile--photo .gtile__mono{display:none}
+.gtile figcaption{z-index:3}
+/* automatikus képváltás */
+.gtile--swap img{opacity:0;transition:opacity 1.4s ease}
+.gtile--swap img.on{opacity:1}
+.gtile--swap img.on{animation:kb 9s ease-out both}
+@keyframes kb{from{transform:scale(1.005)}to{transform:scale(1.075)}}
+@media (prefers-reduced-motion:reduce){.gtile--swap img.on{animation:none}}
+.swapdots{position:absolute;top:14px;right:14px;z-index:4;display:flex;gap:6px}
+.swapdots i{width:5px;height:5px;border-radius:50%;background:rgba(243,235,226,.32);transition:background .4s,width .4s}
+.swapdots i.on{background:var(--bronze-lt);width:16px;border-radius:3px}
 .gtile__mono{font-family:var(--display);font-size:clamp(30px,4vw,52px);color:rgba(243,235,226,.16);letter-spacing:.06em}
-.gtile figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
-  background:linear-gradient(0deg,rgba(14,11,10,.9),rgba(14,11,10,0));
+.gtile figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 18px 16px;
+  background:linear-gradient(0deg,rgba(14,11,10,.94) 0%,rgba(14,11,10,.72) 45%,rgba(14,11,10,0) 100%);
   font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
 .gtile figcaption b{display:block;color:var(--bronze-lt);font-weight:400;letter-spacing:.24em;margin-bottom:4px}
 .g-a{grid-column:span 7;aspect-ratio:4/3}
 .g-b{grid-column:span 5;aspect-ratio:4/5}
-.g-c{grid-column:span 4;aspect-ratio:1}
-.g-d{grid-column:span 4;aspect-ratio:1}
-.g-e{grid-column:span 4;aspect-ratio:1}
-@media(max-width:760px){.g-a,.g-b{grid-column:span 12}.g-c,.g-d,.g-e{grid-column:span 6}.g-e{grid-column:span 12;aspect-ratio:16/10}}
+.g-c{grid-column:span 6;aspect-ratio:4/3}
+.g-d{grid-column:span 6;aspect-ratio:4/3}
+@media(max-width:760px){.g-a,.g-b{grid-column:span 12}.g-c,.g-d{grid-column:span 6}}
 
 /* closed period */
 .day.closed{background:repeating-linear-gradient(135deg,transparent,transparent 4px,rgba(243,235,226,.05) 4px,rgba(243,235,226,.05) 5px)}
@@ -347,6 +364,14 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
   background:rgba(201,166,158,.07);margin-bottom:6px}
 .notice b{color:var(--rose);font-weight:400;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;white-space:nowrap;padding-top:3px}
 .notice span{font-size:13px;color:var(--dim);font-weight:200;line-height:1.6}
+
+.hours{border:1px solid var(--line);background:var(--ink-2);padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:4px}
+.hrow{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--line-soft);font-size:14px}
+.hrow:last-of-type{border-bottom:0}
+.hrow span:first-child{color:var(--dim)}
+.hrow span:last-child{font-variant-numeric:tabular-nums}
+.hrow.off span:last-child{color:var(--dim-2);font-size:11px;letter-spacing:.2em;text-transform:uppercase}
+.hours__note{margin-top:18px;padding-top:18px;border-top:1px solid var(--line-soft);font-size:12.5px;color:var(--dim-2);font-weight:200;line-height:1.7}
 
 /* reveal */
 .rv{opacity:0;transform:translateY(24px);transition:opacity 1s cubic-bezier(.2,.8,.3,1),transform 1s cubic-bezier(.2,.8,.3,1)}
@@ -402,9 +427,9 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
 <section class="sect" id="rolam">
   <div class="wrap">
     <div class="about">
-      <figure class="plate rv" style="margin:0">
-        <span class="plate__mono">PL</span>
-        <figcaption class="plate__cap">Pintér Laura &middot; portré</figcaption>
+      <figure class="plate plate--photo rv" style="margin:0">
+        <img src="assets/laura.jpg" alt="Pintér Laura szempilla stylist csipesszel és pillakefével">
+        <figcaption class="plate__cap">Pintér Laura &middot; Veszprém</figcaption>
       </figure>
       <div class="about__copy rv">
         <p class="eyebrow">Rólam</p>
@@ -564,10 +589,13 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
           <div class="crow"><dt>Fizetés</dt><dd>Készpénz</dd></div>
         </dl>
       </div>
-      <figure class="plate plate--wide rv" style="margin:0" data-slot="szalon">
-        <span class="plate__mono">PL</span>
-        <figcaption class="plate__cap">A szalon &middot; Hold utca 14/2</figcaption>
-      </figure>
+      <div class="hours rv">
+        <p class="eyebrow" style="margin-bottom:14px">Nyitvatartás</p>
+        <div class="hrow"><span>Kedd &ndash; péntek</span><span>9:00 &ndash; 18:00</span></div>
+        <div class="hrow"><span>Szombat</span><span>9:00 &ndash; 13:00</span></div>
+        <div class="hrow off"><span>Vasárnap &ndash; hétfő</span><span>Zárva</span></div>
+        <p class="hours__note">A kezelés hossza technikánként 30&ndash;165 perc, ezért kizárólag előre egyeztetett időpontban dolgozom. A foglalóban mindig a valós szabad sávok látszanak.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -604,11 +632,19 @@ var RULES = [
 ];
 
 var GALLERY = [
-  {cls:"g-a", label:"2D",        cap:"C és M ívvel keverve &middot; 7&ndash;11 mm"},
-  {cls:"g-b", label:"5D Volume", cap:"Dús hatás, könnyed szálakból"},
-  {cls:"g-c", label:"Közeli",    cap:"Szálankénti pontosság"},
-  {cls:"g-d", label:"3D",        cap:"Nyitott, emelt tekintet"},
-  {cls:"g-e", label:"A szalonban", cap:"Kezelés közben"}
+  {cls:"g-a", label:"Közeli", cap:"Szálankénti pontosság",
+   swap:[
+     {src:"assets/macro.jpg",  alt:"Elkészült szempillaépítés közelről, nyitott szemmel"},
+     {src:"assets/face.jpg",   alt:"Vendég a kezelés után, kész szempillákkal"},
+     {src:"assets/tech2d.jpg", alt:"2D technika, C és M ív keverve, csukott szemmel"},
+     {src:"assets/salon.jpg",  alt:"Vendég a kezelőágyon, elkészült szempillákkal"}
+   ]},
+  {cls:"g-b", label:"A kezelés után", cap:"Sminkmentes, letisztult végeredmény", src:"assets/face.jpg",
+   alt:"Vendég arca a kezelés után, elkészült szempillákkal"},
+  {cls:"g-c", label:"2D", cap:"C és M ívvel keverve &middot; 7&ndash;11 mm", src:"assets/tech2d.jpg",
+   alt:"2D szempillaépítés közelről, C és M ív keverve"},
+  {cls:"g-d", label:"A szalonban", cap:"Kezelés közben", src:"assets/salon.jpg",
+   alt:"Vendég a kezelőágyon a szalonban"}
 ];
 
 /* Zárva / szabadság &ndash; ezt Laura állítja majd az admin felületen */
@@ -618,7 +654,10 @@ var CLOSED = [
 
 var HU_MONTHS = ["január","február","március","április","május","június","július","augusztus","szeptember","október","november","december"];
 var HU_DAYS = ["vasárnap","hétfő","kedd","szerda","csütörtök","péntek","szombat"];
-var ft = function(n){ return n.toLocaleString("hu-HU") + " Ft"; };
+/* Laura árlistája ponttal tagol: 12.000 Ft */
+var ft = function(n){
+  return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " Ft";
+};
 
 /* ── price list ───────────────────────────── */
 var pg = document.getElementById("pricegrid");
@@ -645,13 +684,44 @@ RULES.forEach(function(r){
 var gal = document.getElementById("gallery");
 GALLERY.forEach(function(g){
   var f = document.createElement("figure");
-  f.className = "gtile " + g.cls;
+  f.className = "gtile gtile--photo " + g.cls + (g.swap ? " gtile--swap" : "");
   f.style.margin = "0";
-  f.dataset.slot = g.label;
-  f.innerHTML = '<span class="gtile__mono">PL</span>' +
-                '<figcaption><b>' + g.label + '</b>' + g.cap + '</figcaption>';
+  var html = "";
+  if (g.swap){
+    g.swap.forEach(function(im, i){
+      html += '<img src="' + im.src + '" alt="' + im.alt + '"' + (i === 0 ? ' class="on"' : '') + '>';
+    });
+    html += '<span class="swapdots">' + g.swap.map(function(_, i){ return '<i' + (i === 0 ? ' class="on"' : '') + '></i>'; }).join("") + '</span>';
+  } else {
+    html += '<img src="' + g.src + '" alt="' + g.alt + '">';
+  }
+  html += '<figcaption><b>' + g.label + '</b>' + g.cap + '</figcaption>';
+  f.innerHTML = html;
   gal.appendChild(f);
 });
+
+/* automatikus képváltás a nagy tile-on */
+(function(){
+  var box = gal.querySelector(".gtile--swap");
+  if (!box) return;
+  var imgs = box.querySelectorAll("img"), dots = box.querySelectorAll(".swapdots i");
+  if (imgs.length < 2) return;
+  var i = 0, timer = null, paused = false;
+  function step(){
+    if (paused) return;
+    imgs[i].classList.remove("on"); dots[i].classList.remove("on");
+    i = (i + 1) % imgs.length;
+    imgs[i].classList.add("on"); dots[i].classList.add("on");
+  }
+  function play(){ if (!timer) timer = setInterval(step, 4800); }
+  function stop(){ clearInterval(timer); timer = null; }
+  box.addEventListener("mouseenter", function(){ paused = true; });
+  box.addEventListener("mouseleave", function(){ paused = false; });
+  /* csak akkor pörög, ha látszik */
+  new IntersectionObserver(function(es){
+    es.forEach(function(e){ e.isIntersecting ? play() : stop(); });
+  }, {threshold:.25}).observe(box);
+})();
 
 /* ── availability (demo) ──────────────────── */
 var BASE = ["09:00","11:30","14:00","16:30"];
