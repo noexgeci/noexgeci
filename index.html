@@ -323,6 +323,31 @@ footer{border-top:1px solid var(--line-soft);padding:44px 0;text-align:center;di
 footer .mark{font-family:var(--script);font-size:28px;color:var(--bronze-lt)}
 footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--dim-2)}
 
+/* gallery */
+.gallery{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(10px,1.4vw,18px);margin-top:56px}
+.gtile{position:relative;overflow:hidden;border:1px solid var(--line-soft);background:
+  radial-gradient(90% 70% at 35% 25%,rgba(201,166,158,.13),transparent 62%),
+  linear-gradient(155deg,var(--ink-3),var(--ink-2));display:grid;place-items:center}
+.gtile img{width:100%;height:100%;object-fit:cover;display:block}
+.gtile__mono{font-family:var(--display);font-size:clamp(30px,4vw,52px);color:rgba(243,235,226,.16);letter-spacing:.06em}
+.gtile figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;
+  background:linear-gradient(0deg,rgba(14,11,10,.9),rgba(14,11,10,0));
+  font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.gtile figcaption b{display:block;color:var(--bronze-lt);font-weight:400;letter-spacing:.24em;margin-bottom:4px}
+.g-a{grid-column:span 7;aspect-ratio:4/3}
+.g-b{grid-column:span 5;aspect-ratio:4/5}
+.g-c{grid-column:span 4;aspect-ratio:1}
+.g-d{grid-column:span 4;aspect-ratio:1}
+.g-e{grid-column:span 4;aspect-ratio:1}
+@media(max-width:760px){.g-a,.g-b{grid-column:span 12}.g-c,.g-d,.g-e{grid-column:span 6}.g-e{grid-column:span 12;aspect-ratio:16/10}}
+
+/* closed period */
+.day.closed{background:repeating-linear-gradient(135deg,transparent,transparent 4px,rgba(243,235,226,.05) 4px,rgba(243,235,226,.05) 5px)}
+.notice{display:flex;gap:14px;align-items:flex-start;padding:15px 18px;border:1px solid rgba(201,166,158,.3);
+  background:rgba(201,166,158,.07);margin-bottom:6px}
+.notice b{color:var(--rose);font-weight:400;font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;white-space:nowrap;padding-top:3px}
+.notice span{font-size:13px;color:var(--dim);font-weight:200;line-height:1.6}
+
 /* reveal */
 .rv{opacity:0;transform:translateY(24px);transition:opacity 1s cubic-bezier(.2,.8,.3,1),transform 1s cubic-bezier(.2,.8,.3,1)}
 .rv.in{opacity:1;transform:none}
@@ -342,6 +367,7 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
   <div class="nav__links">
     <a href="#rolam">Rólam</a>
     <a href="#arak">Árak</a>
+    <a href="#munkaim">Munkáim</a>
     <a href="#hazirend">Házirend</a>
     <a href="#kapcsolat">Kapcsolat</a>
     <a class="nav__cta" href="#foglalas">Időpontfoglalás</a>
@@ -445,9 +471,10 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
                 <button type="button" id="nextM" aria-label="Következő hónap">&#8250;</button>
               </span>
             </div>
+            <div id="closedNotice"></div>
             <div class="cal__dow"><span>H</span><span>K</span><span>Sze</span><span>Cs</span><span>P</span><span>Szo</span><span>V</span></div>
             <div class="cal__grid" id="calGrid"></div>
-            <div class="cal__legend"><span><b></b>Szabad időpont</span><span>Halvány &mdash; betelt vagy zárva</span></div>
+            <div class="cal__legend"><span><b></b>Szabad időpont</span><span>Halvány &mdash; betelt</span><span>Sávozott &mdash; szabadság</span></div>
           </div>
         </div>
 
@@ -507,6 +534,18 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
   </div>
 </section>
 
+<!-- ── munkáim ── -->
+<section class="sect" id="munkaim">
+  <div class="wrap">
+    <div class="sect__head rv">
+      <p class="eyebrow">Munkáim</p>
+      <h2>Minden szett a szemformához igazítva.</h2>
+      <p>Ív, hossz és dússág vendégenként külön válogatva &ndash; a cél mindig a természetes arány, nem a sablon.</p>
+    </div>
+    <div class="gallery rv" id="gallery"></div>
+  </div>
+</section>
+
 <!-- ── kapcsolat ── -->
 <section class="sect" id="kapcsolat">
   <div class="wrap">
@@ -525,9 +564,9 @@ footer small{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;colo
           <div class="crow"><dt>Fizetés</dt><dd>Készpénz</dd></div>
         </dl>
       </div>
-      <figure class="plate plate--wide rv" style="margin:0">
+      <figure class="plate plate--wide rv" style="margin:0" data-slot="szalon">
         <span class="plate__mono">PL</span>
-        <figcaption class="plate__cap">Munkáim &middot; galéria</figcaption>
+        <figcaption class="plate__cap">A szalon &middot; Hold utca 14/2</figcaption>
       </figure>
     </div>
   </div>
@@ -564,6 +603,19 @@ var RULES = [
   ["Fizetés","Készpénzben","A helyszínen, a kezelés végén."]
 ];
 
+var GALLERY = [
+  {cls:"g-a", label:"2D",        cap:"C és M ívvel keverve &middot; 7&ndash;11 mm"},
+  {cls:"g-b", label:"5D Volume", cap:"Dús hatás, könnyed szálakból"},
+  {cls:"g-c", label:"Közeli",    cap:"Szálankénti pontosság"},
+  {cls:"g-d", label:"3D",        cap:"Nyitott, emelt tekintet"},
+  {cls:"g-e", label:"A szalonban", cap:"Kezelés közben"}
+];
+
+/* Zárva / szabadság &ndash; ezt Laura állítja majd az admin felületen */
+var CLOSED = [
+  {from:"2026-09-14", to:"2026-09-18", label:"Szabadság"}
+];
+
 var HU_MONTHS = ["január","február","március","április","május","június","július","augusztus","szeptember","október","november","december"];
 var HU_DAYS = ["vasárnap","hétfő","kedd","szerda","csütörtök","péntek","szombat"];
 var ft = function(n){ return n.toLocaleString("hu-HU") + " Ft"; };
@@ -589,11 +641,32 @@ RULES.forEach(function(r){
   rg.appendChild(el);
 });
 
+/* ── gallery ──────────────────────────────── */
+var gal = document.getElementById("gallery");
+GALLERY.forEach(function(g){
+  var f = document.createElement("figure");
+  f.className = "gtile " + g.cls;
+  f.style.margin = "0";
+  f.dataset.slot = g.label;
+  f.innerHTML = '<span class="gtile__mono">PL</span>' +
+                '<figcaption><b>' + g.label + '</b>' + g.cap + '</figcaption>';
+  gal.appendChild(f);
+});
+
 /* ── availability (demo) ──────────────────── */
 var BASE = ["09:00","11:30","14:00","16:30"];
 function seed(d){ var s = d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate(); s = (s*2654435761) % 4294967296; return s / 4294967296; }
 function key(d){ return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate(); }
+function closedFor(d){
+  for (var i = 0; i < CLOSED.length; i++){
+    var c = CLOSED[i];
+    var a = new Date(c.from + "T00:00:00"), b = new Date(c.to + "T00:00:00");
+    if (d >= a && d <= b) return c;
+  }
+  return null;
+}
 function slotsFor(d){
+  if (closedFor(d)) return [];
   var dow = d.getDay();
   if (dow === 0 || dow === 1) return [];          /* vasárnap, hétfő zárva */
   var r = seed(d);
@@ -637,6 +710,20 @@ function drawCalendar(){
   nextM.disabled = view >= maxMonth;
   calGrid.innerHTML = "";
 
+  var note = document.getElementById("closedNotice");
+  note.innerHTML = "";
+  CLOSED.forEach(function(c){
+    var a = new Date(c.from + "T00:00:00"), b = new Date(c.to + "T00:00:00");
+    if (a.getMonth() === view.getMonth() && a.getFullYear() === view.getFullYear()){
+      var el = document.createElement("div");
+      el.className = "notice";
+      el.innerHTML = "<b>" + c.label + "</b><span>" + HU_MONTHS[a.getMonth()] + " " + a.getDate() +
+        ". &ndash; " + HU_MONTHS[b.getMonth()] + " " + b.getDate() +
+        ". között zárva tartok. A szabadság előtti és utáni időpontok gyorsan telnek &ndash; érdemes előre foglalni.</span>";
+      note.appendChild(el);
+    }
+  });
+
   var first = new Date(view.getFullYear(), view.getMonth(), 1);
   var lead = (first.getDay() + 6) % 7;                                  /* hétfő = 0 */
   var days = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
@@ -650,7 +737,9 @@ function drawCalendar(){
       var b = document.createElement("button");
       b.type = "button"; b.className = "day"; b.textContent = d;
       var free = date >= TODAY ? slotsFor(date) : [];
-      if (!free.length){ b.disabled = true; b.setAttribute("aria-label", d + ". – nincs szabad időpont"); }
+      var cl = closedFor(date);
+      if (cl){ b.disabled = true; b.classList.add("closed"); b.setAttribute("aria-label", d + ". – " + cl.label + ", zárva"); }
+      else if (!free.length){ b.disabled = true; b.setAttribute("aria-label", d + ". – nincs szabad időpont"); }
       else {
         b.classList.add("free");
         b.setAttribute("aria-pressed", state.date && key(state.date) === key(date) ? "true" : "false");
